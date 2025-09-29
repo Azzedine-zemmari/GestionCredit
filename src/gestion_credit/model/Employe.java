@@ -1,8 +1,8 @@
 package gestion_credit.model;
 
-import gestion_credit.utils.Secteur;
-import gestion_credit.utils.SituationFamilly;
-import gestion_credit.utils.TypeContrat;
+import gestion_credit.utils.enums.Secteur;
+import gestion_credit.utils.enums.SituationFamilly;
+import gestion_credit.utils.enums.TypeContrat;
 
 import java.time.LocalDate;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package gestion_credit.utils;
+package gestion_credit.utils.enums;
 
 public enum TypeContrat {
     CDI_PUBLIC,
