@@ -13,8 +13,9 @@ public class Credit {
     private Integer dureEnMois;
     private String typeCredit;
     private Decision decision;
+    private UUID personId;
 
-    public Credit(UUID id, LocalDate dateDeCredit, Double montantOctroye, Double tauxInteret, Integer dureEnMois, String typeCredit, Decision decision) {
+    public Credit(UUID id, LocalDate dateDeCredit, Double montantOctroye, Double tauxInteret, Integer dureEnMois, String typeCredit, Decision decision,UUID personId) {
         this.id = id;
         this.dateDeCredit = dateDeCredit;
         this.montantOctroye = montantOctroye;
@@ -22,6 +23,7 @@ public class Credit {
         this.dureEnMois = dureEnMois;
         this.typeCredit = typeCredit;
         this.decision = decision;
+        this.personId = personId;
     }
 
     public UUID getId() {
@@ -79,6 +81,12 @@ public class Credit {
     public void setDecision(Decision decision) {
         this.decision = decision;
     }
+    public UUID getPersonId(){
+        return personId;
+    }
+    public void setPersonId(UUID personId){
+        this.personId = personId;
+    }
 
     @Override
     public String toString() {
@@ -90,6 +98,7 @@ public class Credit {
                 ", dureEnMois=" + dureEnMois +
                 ", typeCredit='" + typeCredit + '\'' +
                 ", decision=" + decision +
+                ", personId=" + personId +
                 '}';
     }
 }
