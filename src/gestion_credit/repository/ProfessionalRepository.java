@@ -4,8 +4,10 @@ import gestion_credit.model.Professionel;
 import gestion_credit.utils.connnection.Connect;
 import gestion_credit.utils.enums.SituationFamilly;
 
+import javax.xml.transform.Result;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 
@@ -54,5 +56,41 @@ public class ProfessionalRepository {
             System.out.println("erreur " + e);
         }
     }
+
+    public Professionel consulterProfileProfessionel(UUID id) {
+        String sql = "SELECT * FROM professionel WHERE id = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setObject(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new Professionel(
+                        (UUID) rs.getObject("id"),
+                        rs.getString("nom"),
+                        rs.getString("prenom"),
+                        rs.getDate("date_naissance").toLocalDate(),
+                        rs.getString("ville"),
+                        rs.getInt("nombre_enfants"),
+                        rs.getBoolean("investissement"),
+                        rs.getBoolean("placement"),
+                        SituationFamilly.valueOf(rs.getString("situation_familly")),
+                        rs.getDate("created_at").toLocalDate(),
+                        rs.getInt("score"),
+                        rs.getDouble("revenu"),
+                        rs.getString("immatriculation_fiscale"),
+                        rs.getString("secteur_activite"),
+                        rs.getString("activite")
+                );
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Erreur pour consulter Professionel: " + e);
+        }
+
+        return null;
+    }
+
 
 }
