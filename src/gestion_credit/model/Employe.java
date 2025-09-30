@@ -14,8 +14,8 @@ public class Employe extends Person{
     private TypeContrat typeContrat;
     private Secteur secteur;
 
-    public Employe(UUID id, String nom, String prenom, LocalDate dateNaissance, String ville, Integer nombreEnfants, String placement, SituationFamilly situationFamilly, LocalDate created_at, Integer score, Double salaire, Integer ancienneté , String post ,TypeContrat typeContrat, Secteur secteur){
-        super(id,nom,prenom,dateNaissance,ville,nombreEnfants,placement,situationFamilly,created_at,score);
+    public Employe(UUID id, String nom, String prenom, LocalDate dateNaissance, String ville, Integer nombreEnfants,Boolean invistisement ,Boolean placement, SituationFamilly situationFamilly, LocalDate created_at, Integer score, Double salaire, Integer ancienneté , String post ,TypeContrat typeContrat, Secteur secteur){
+        super(id,nom,prenom,dateNaissance,ville,nombreEnfants,invistisement,placement,situationFamilly,created_at,score);
         this.salaire = salaire;
         this.ancienneté = ancienneté;
         this.post = post;

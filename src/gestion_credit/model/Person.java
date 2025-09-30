@@ -12,12 +12,13 @@ public abstract class Person {
     protected LocalDate dateNaissance;
     protected String ville;
     protected Integer nombreEnfants;
-    protected String placement;
+    protected Boolean invistisement;
+    protected Boolean placement;
     protected SituationFamilly situationFamilly;
     protected LocalDate created_at;
     protected Integer score;
 
-    public Person(UUID id, String nom, String prenom, LocalDate dateNaissance, String ville, Integer nombreEnfants, String placement, SituationFamilly situationFamilly, LocalDate created_at, Integer score) {
+    public Person(UUID id, String nom, String prenom, LocalDate dateNaissance, String ville, Integer nombreEnfants,Boolean invistisement, Boolean placement, SituationFamilly situationFamilly, LocalDate created_at, Integer score) {
         this.id = id;
         this.nom = nom;
         this.prenom = prenom;
@@ -25,6 +26,7 @@ public abstract class Person {
         this.ville = ville;
         this.nombreEnfants = nombreEnfants;
         this.placement = placement;
+        this.invistisement = invistisement;
         this.situationFamilly = situationFamilly;
         this.created_at = created_at;
         this.score = score;
@@ -78,11 +80,11 @@ public abstract class Person {
         this.nombreEnfants = nombreEnfants;
     }
 
-    public String getPlacement() {
+    public Boolean getPlacement() {
         return placement;
     }
 
-    public void setPlacement(String placement) {
+    public void setPlacement(Boolean placement) {
         this.placement = placement;
     }
 
@@ -108,6 +110,12 @@ public abstract class Person {
 
     public void setScore(Integer score) {
         this.score = score;
+    }
+    public Boolean getInvistisement(){
+        return  this.invistisement;
+    }
+    public void setInvistisement(Boolean invistisement){
+        this.invistisement = invistisement;
     }
 
     @Override

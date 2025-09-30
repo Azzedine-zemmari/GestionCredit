@@ -11,8 +11,8 @@ public class Professionel extends Person{
     private String secteurActivite;
     private String activite;
 
-    public Professionel(UUID id, String nom, String prenom, LocalDate dateNaissance, String ville, Integer nombreEnfants, String placement, SituationFamilly situationFamilly, LocalDate created_at, Integer score, Double revenu, String immatriculationFiscale, String secteurActivite, String activite) {
-        super(id, nom, prenom, dateNaissance, ville, nombreEnfants, placement, situationFamilly, created_at, score);
+    public Professionel(UUID id, String nom, String prenom, LocalDate dateNaissance, String ville, Integer nombreEnfants, Boolean invistisement,Boolean placement, SituationFamilly situationFamilly, LocalDate created_at, Integer score, Double revenu, String immatriculationFiscale, String secteurActivite, String activite) {
+        super(id, nom, prenom, dateNaissance, ville, nombreEnfants,invistisement, placement, situationFamilly, created_at, score);
         this.revenu = revenu;
         this.immatriculationFiscale = immatriculationFiscale;
         this.secteurActivite = secteurActivite;
