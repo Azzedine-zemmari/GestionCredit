@@ -2,10 +2,12 @@ package gestion_credit.repository;
 
 import gestion_credit.model.Professionel;
 import gestion_credit.utils.connnection.Connect;
+import gestion_credit.utils.enums.SituationFamilly;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.UUID;
 
 public class ProfessionalRepository {
     private Connection connection;
@@ -38,6 +40,18 @@ public class ProfessionalRepository {
             stmt.executeUpdate();
         }catch (SQLException e){
             System.out.println("erreur "+ e);
+        }
+    }
+    public void modifierProfessional(UUID id, Double revenu , String ville , SituationFamilly situationFamilly){
+        String sql = "UPDATE professional SET revenu = ? , ville = ? , situation_familly = ? where id = ?";
+        try(PreparedStatement stmt = connection.prepareStatement(sql)){
+            stmt.setObject(1,id);
+            stmt.setDouble(2,revenu);
+            stmt.setString(3,ville);
+            stmt.setString(4,situationFamilly.name());
+            stmt.executeUpdate();
+        }catch (SQLException e){
+            System.out.println("erreur " + e);
         }
     }
 
