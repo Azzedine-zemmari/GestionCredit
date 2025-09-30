@@ -22,7 +22,7 @@ public class EmployeRepository {
         }
     }
     public void createEmploye(Employe employe){
-        String sql = "INSERT INTO employe(id,nom,prenom,date_naissance,ville,nombre_enfants,invistisement,placement,situation_familly,created_at,score,salaire,anciennete,post,type_contrat,secteur) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
+        String sql = "INSERT INTO employe(id,nom,prenom,date_naissance,ville,nombre_enfants,invistisement,placement,situation_familly,created_at,score,salaire,anciennete,post,type_contrat,secteur) VALUES(?,?,?,?,?,?,?,?,CAST(? AS situation_familly),?,?,?,?,?,CAST(? as typeContrat),cast(? as secteur))";
         try(PreparedStatement stmt = connection.prepareStatement(sql)){
             stmt.setObject(1, employe.getId());
             stmt.setString(2, employe.getNom());
@@ -47,13 +47,14 @@ public class EmployeRepository {
         }
     }
     public void modifierEmploye(UUID id, Double salaire , String ville , SituationFamilly situationFamilly){
-        String sql = "UPDATE employe SET salaire = ? , ville = ? , situation_familly = ? where id = ?";
+        String sql = "UPDATE employe SET salaire = ? , ville = ? , situation_familly = CAST(? as situation_familly) where id = ?";
         try(PreparedStatement stmt = connection.prepareStatement(sql)){
-            stmt.setObject(1,id);
-            stmt.setDouble(2,salaire);
-            stmt.setString(3,ville);
-            stmt.setString(4,situationFamilly.name());
+            stmt.setDouble(1,salaire);
+            stmt.setString(2,ville);
+            stmt.setString(3,situationFamilly.name());
+            stmt.setObject(4,id);
             stmt.executeUpdate();
+            System.out.println("Modifier done");
         }catch (SQLException e){
             System.out.println("erreur " + e);
         }
@@ -73,7 +74,7 @@ public class EmployeRepository {
                         rs.getDate("date_naissance").toLocalDate(),
                         rs.getString("ville"),
                         rs.getInt("nombre_enfants"),
-                        rs.getBoolean("investissement"),
+                        rs.getBoolean("invistisement"),
                         rs.getBoolean("placement"),
                         SituationFamilly.valueOf(rs.getString("situation_familly")),
                         rs.getDate("created_at").toLocalDate(),
@@ -114,7 +115,7 @@ public class EmployeRepository {
                        rs.getDate("date_naissance").toLocalDate(),
                        rs.getString("ville"),
                        rs.getInt("nombre_enfants"),
-                       rs.getBoolean("investissement"),
+                       rs.getBoolean("invistisement"),
                        rs.getBoolean("placement"),
                        SituationFamilly.valueOf(rs.getString("situation_familly")),
                        rs.getDate("created_at").toLocalDate(),
