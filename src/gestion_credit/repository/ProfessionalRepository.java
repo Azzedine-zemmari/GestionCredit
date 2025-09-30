@@ -21,7 +21,7 @@ public class ProfessionalRepository {
         }
     }
     public void createProfessional(Professionel p){
-        String sql = "Insert into professional(id,nom,prenom,date_naissance,ville,nombre_enfants,invistisement,placement,situation_familly,created_at,score,revenu,immatriculation_Fiscale,secteurActivite,activite) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "Insert into professional(id,nom,prenom,date_naissance,ville,nombre_enfants,invistisement,placement,situation_familly,created_at,score,revenu,immatriculation_Fiscale,secteurActivite,activite) VALUES(?,?,?,?,?,?,?,?,cast(? as situation_familly),?,?,?,?,?,?)";
         try(PreparedStatement stmt = connection.prepareStatement(sql)){
             stmt.setObject(1, p.getId());
             stmt.setString(2, p.getNom());
@@ -44,12 +44,12 @@ public class ProfessionalRepository {
         }
     }
     public void modifierProfessional(UUID id, Double revenu , String ville , SituationFamilly situationFamilly){
-        String sql = "UPDATE professional SET revenu = ? , ville = ? , situation_familly = ? where id = ?";
+        String sql = "UPDATE professional SET revenu = ? , ville = ? , situation_familly = CAST(? as situation_familly) where id = ?";
         try(PreparedStatement stmt = connection.prepareStatement(sql)){
-            stmt.setObject(1,id);
-            stmt.setDouble(2,revenu);
-            stmt.setString(3,ville);
-            stmt.setString(4,situationFamilly.name());
+            stmt.setDouble(1,revenu);
+            stmt.setString(2,ville);
+            stmt.setString(3,situationFamilly.name());
+            stmt.setObject(4,id);
             stmt.executeUpdate();
         }catch (SQLException e){
             System.out.println("erreur " + e);
@@ -57,7 +57,7 @@ public class ProfessionalRepository {
     }
 
     public Professionel consulterProfileProfessionel(UUID id) {
-        String sql = "SELECT * FROM professionel WHERE id = ?";
+        String sql = "SELECT * FROM professional WHERE id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setObject(1, id);
@@ -71,14 +71,14 @@ public class ProfessionalRepository {
                         rs.getDate("date_naissance").toLocalDate(),
                         rs.getString("ville"),
                         rs.getInt("nombre_enfants"),
-                        rs.getBoolean("investissement"),
+                        rs.getBoolean("invistisement"),
                         rs.getBoolean("placement"),
                         SituationFamilly.valueOf(rs.getString("situation_familly")),
                         rs.getDate("created_at").toLocalDate(),
                         rs.getInt("score"),
                         rs.getDouble("revenu"),
                         rs.getString("immatriculation_fiscale"),
-                        rs.getString("secteur_activite"),
+                        rs.getString("secteurActivite"),
                         rs.getString("activite")
                 );
             }
@@ -114,14 +114,14 @@ public class ProfessionalRepository {
                         rs.getDate("date_naissance").toLocalDate(),
                         rs.getString("ville"),
                         rs.getInt("nombre_enfants"),
-                        rs.getBoolean("investissement"),
+                        rs.getBoolean("invistisement"),
                         rs.getBoolean("placement"),
                         SituationFamilly.valueOf(rs.getString("situation_familly")),
                         rs.getDate("created_at").toLocalDate(),
                         rs.getInt("score"),
                         rs.getDouble("revenu"),
                         rs.getString("immatriculation_fiscale"),
-                        rs.getString("secteur_activite"),
+                        rs.getString("secteurActivite"),
                         rs.getString("activite")
                 ));
             }
