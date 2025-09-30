@@ -92,5 +92,14 @@ public class ProfessionalRepository {
         return null;
     }
 
+    public void supprimerProfessionall(UUID id){
+        String sql = "DELETE FROM professional where id = ?";
+        try(PreparedStatement stmt = connection.prepareStatement(sql)){
+            stmt.setObject(1,id);
+            stmt.executeUpdate();
+        }catch (SQLException e){
+            System.out.println("Erreur " + e);
+        }
+    }
 
 }
