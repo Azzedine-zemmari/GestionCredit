@@ -1,11 +1,14 @@
 package gestion_credit.service;
 
+import gestion_credit.model.Echeance;
 import gestion_credit.model.Person;
 import gestion_credit.utils.enums.SituationFamilly;
+import gestion_credit.utils.enums.StatusPaiment;
 import gestion_credit.utils.enums.TypeContrat;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.List;
 
 public class ScoreService {
 
@@ -56,6 +59,29 @@ public class ScoreService {
         return score;
     }
 
+    public int countScoreParHistorique(List<Echeance> echeances){
+        int score = 0;
+        int retards = 0;
+        int impayesNonRegles = 0;
+        int impayesRegles = 0;
+
+        for(Echeance e : echeances){
+            if(e.getStatusPaiment() == StatusPaiment.IMPAYE_REGLE){
+                impayesRegles++;
+            } else if (e.getStatusPaiment() == StatusPaiment.IMPAYE_NON_REGLE) {
+                impayesNonRegles++;
+            }else if(e.getStatusPaiment() == StatusPaiment.EN_RETARD || e.getStatusPaiment() == StatusPaiment.PAYE_EN_RETARD){
+                retards++;
+            }
+        }
+        if(impayesRegles > 0) score -= 10;
+        if(impayesNonRegles > 0 ) score +=5;
+        if(retards >= 1 && retards<= 3) score-=3;
+        if(retards >=4) score -=5;
+        if(impayesNonRegles == 0  && impayesRegles == 0 && retards == 0) score +=10;
+
+        return score;
+    }
 
 
 }
