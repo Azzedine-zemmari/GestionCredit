@@ -56,5 +56,16 @@ public class CreditRepository {
         }
     }
 
+    public void deleteCredit(UUID id){
+        String sql = "DELETE FROM credit where id = ?";
+        try(PreparedStatement stmt = connection.prepareStatement(sql)){
+            stmt.setObject(1,id);
+            stmt.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+            System.out.println("Erreur " + e);
+        }
+
+    }
 
 }
