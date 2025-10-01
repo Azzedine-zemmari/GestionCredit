@@ -97,5 +97,33 @@ public class CreditRepository {
         return  null;
     }
 
+    public List<Credit> getCreditForClient(UUID id){
+        ArrayList<Credit> credits = new ArrayList<>();
+        String sql = "SELECT * FROM credit where person_id = ?";
+        try(PreparedStatement p = connection.prepareStatement(sql)){
+            p.setObject(1,id);
+            ResultSet rs = p.executeQuery();
+            while (rs.next()){
+                credits.add(
+                        new Credit(
+                                (UUID) rs.getObject("id"),
+                                rs.getDate("date_de_credit").toLocalDate(),
+                                rs.getDouble("montant_octroye"),
+                                rs.getDouble("taux_interet"),
+                                rs.getInt("duree_en_mois"),
+                                rs.getString("type_credit"),
+                                Decision.valueOf(rs.getString("decision")),
+                                (UUID) rs.getObject("person_id"),
+                                PersonType.valueOf(rs.getString("person_type"))
+                        )
+                );
+            }
+            return credits;
+        }catch (SQLException e){
+            e.printStackTrace();
+            System.out.println("Erreur " + e);
+        }
+        return null;
+    }
 
 }
