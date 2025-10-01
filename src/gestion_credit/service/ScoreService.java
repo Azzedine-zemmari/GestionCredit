@@ -1,7 +1,9 @@
 package gestion_credit.service;
 
 import gestion_credit.model.Echeance;
+import gestion_credit.model.Employe;
 import gestion_credit.model.Person;
+import gestion_credit.model.Professionel;
 import gestion_credit.utils.enums.SituationFamilly;
 import gestion_credit.utils.enums.StatusPaiment;
 import gestion_credit.utils.enums.TypeContrat;
@@ -11,6 +13,30 @@ import java.time.Period;
 import java.util.List;
 
 public class ScoreService {
+
+    public int countScoreForClient(Person person , List<Echeance> echeances){
+        int score = 0;
+        // 1) STABILIT PROFESSIONNELLE (Employe ou Professionnel)
+        if(person instanceof Employe){
+            Employe employe = (Employe) person;
+            score += countScoreParTypeDemploi(employe.getTypeContrat());
+            score += countScoreParAnciennete(employe.getAncienneté());
+            score += countScoreParRevenu(employe.getSalaire());
+        }else if(person instanceof Professionel){
+            Professionel professionel = (Professionel) person;
+            score += countScoreParRevenu(professionel.getRevenu());
+        }
+
+        // 2) RELATION CLIENT (Age + Situation familiale + Enfants)
+        score += countScoreParRelationClient(person);
+
+        // 3) CRITERES COMPLEMENTAIRES (Patrimoine / Investment)
+        if(Boolean.TRUE.equals(person.getInvistisement()) || Boolean.TRUE.equals(person.getPlacement())){
+            score+=10;
+        }
+        score += countScoreParHistorique(echeances);
+        return score;
+    }
 
     public int countScoreParTypeDemploi(TypeContrat typeEmploi){
         switch (typeEmploi){
@@ -74,8 +100,8 @@ public class ScoreService {
                 retards++;
             }
         }
-        if(impayesRegles > 0) score -= 10;
-        if(impayesNonRegles > 0 ) score +=5;
+        if(impayesRegles > 0) score += 5;
+        if(impayesNonRegles > 0 ) score -=10;
         if(retards >= 1 && retards<= 3) score-=3;
         if(retards >=4) score -=5;
         if(impayesNonRegles == 0  && impayesRegles == 0 && retards == 0) score +=10;
