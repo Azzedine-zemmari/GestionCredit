@@ -12,16 +12,14 @@ public class Echeance {
     private LocalDate datePaiment;
     private StatusPaiment statusPaiment;
     private UUID creditId;
-    private UUID incidentId;
 
-    public Echeance(UUID id, LocalDate dateEncheance, Double mensualite, LocalDate datePaiment, StatusPaiment statusPaiment, UUID creditId, UUID incidentId) {
+    public Echeance(UUID id, LocalDate dateEncheance, Double mensualite, LocalDate datePaiment, StatusPaiment statusPaiment, UUID creditId) {
         this.id = id;
         this.dateEncheance = dateEncheance;
         this.mensualite = mensualite;
         this.datePaiment = datePaiment;
         this.statusPaiment = statusPaiment;
         this.creditId = creditId;
-        this.incidentId = incidentId;
     }
 
     public UUID getId() {
@@ -72,14 +70,6 @@ public class Echeance {
         this.creditId = creditId;
     }
 
-    public UUID getIncidentId() {
-        return incidentId;
-    }
-
-    public void setIncidentId(UUID incidentId) {
-        this.incidentId = incidentId;
-    }
-
 
     @Override
     public String toString() {
@@ -90,7 +80,6 @@ public class Echeance {
                 ", datePaiment=" + datePaiment +
                 ", statusPaiment=" + statusPaiment +
                 ", creditId=" + creditId +
-                ", incidentId=" + incidentId +
                 '}';
     }
 }

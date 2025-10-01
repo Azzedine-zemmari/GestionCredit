@@ -10,12 +10,14 @@ public class Incident {
     private LocalDate dateIncident;
     private Integer scoreImpact;
     private StatusPaiment typeIncident;
+    private UUID echeance_id;
 
-    public Incident(UUID id, LocalDate dateIncident, Integer scoreImpact, StatusPaiment typeIncident) {
+    public Incident(UUID id, LocalDate dateIncident, Integer scoreImpact, StatusPaiment typeIncident,UUID echeance_id) {
         this.id = id;
         this.dateIncident = dateIncident;
         this.scoreImpact = scoreImpact;
         this.typeIncident = typeIncident;
+        this.echeance_id = echeance_id;
     }
 
     public UUID getId() {
@@ -50,6 +52,14 @@ public class Incident {
         this.typeIncident = typeIncident;
     }
 
+    public UUID getEcheance_id() {
+        return echeance_id;
+    }
+
+    public void setEcheance_id(UUID echeance_id) {
+        this.echeance_id = echeance_id;
+    }
+
     @Override
     public String toString() {
         return "Incident{" +
@@ -57,6 +67,7 @@ public class Incident {
                 ", dateIncident=" + dateIncident +
                 ", scoreImpact=" + scoreImpact +
                 ", typeIncident=" + typeIncident +
+                ", EcheanceId=" + echeance_id +
                 '}';
     }
 }
