@@ -7,7 +7,10 @@ import gestion_credit.utils.enums.PersonType;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class CreditRepository {
@@ -65,7 +68,34 @@ public class CreditRepository {
             e.printStackTrace();
             System.out.println("Erreur " + e);
         }
-
     }
+    public List<Credit> getAllCredit(){
+        ArrayList<Credit> credits = new ArrayList<>();
+        String sql = "SELECT * FROM credit";
+        try(PreparedStatement stmt = connection.prepareStatement(sql)){
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                credits.add(
+                        new Credit(
+                                (UUID) rs.getObject("id"),
+                                rs.getDate("date_de_credit").toLocalDate(),
+                                rs.getDouble("montant_octroye"),
+                                rs.getDouble("taux_interet"),
+                                rs.getInt("duree_en_mois"),
+                                rs.getString("type_credit"),
+                                Decision.valueOf(rs.getString("decision")),
+                                (UUID) rs.getObject("person_id"),
+                                PersonType.valueOf(rs.getString("person_type"))
+                        )
+                );
+            }
+            return credits;
+        }catch (SQLException e){
+            e.printStackTrace();
+            System.out.println("Erreur " + e);
+        }
+        return  null;
+    }
+
 
 }
