@@ -23,7 +23,7 @@ public class CreditRepository {
         }
     }
     public void creeCredit(Credit credit){
-        String sql = "insert into credit(id,date_de_credit,montant_octroye,taux_interet,duree_en_mois,type_credit,decision,person_id,person_type) values(?,?,?,?,?,?,?,?,?)";
+        String sql = "insert into credit(id,date_de_credit,montant_octroye,taux_interet,duree_en_mois,type_credit,decision,person_id,person_type) values(?,?,?,?,?,?,CAST(? as decision),?,?)";
         try(PreparedStatement stmt = connection.prepareStatement(sql)){
             stmt.setObject(1,credit.getId());
             stmt.setDate(2,java.sql.Date.valueOf(credit.getDateDeCredit()));

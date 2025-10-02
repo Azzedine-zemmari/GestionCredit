@@ -3,6 +3,7 @@ package gestion_credit.repository;
 import gestion_credit.model.Echeance;
 import gestion_credit.utils.connnection.Connect;
 import gestion_credit.utils.enums.StatusPaiment;
+import gestion_credit.utils.enums.TypeContrat;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -20,14 +21,21 @@ public class EcheanceRepository {
     }
     // CREATE
     public void createEcheance(Echeance echeance) {
-        String sql = "INSERT INTO echeance(id, date_encheance, mensualite, date_paiment, status_paiment, credit_id) " +
-                "VALUES(?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO echeance(id, dateencheance, mensualite, datepaiment, status_paiment, credit_id) VALUES(?,?,?,?,CAST(? as status_paiment),?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setObject(1, echeance.getId());
             stmt.setDate(2, Date.valueOf(echeance.getDateEncheance()));
             stmt.setDouble(3, echeance.getMensualite());
+            if(echeance.getDatePaiment() != null){
             stmt.setDate(4, Date.valueOf(echeance.getDatePaiment()));
+            }else{
+                stmt.setNull(4, Types.DATE);
+            }
+            if(echeance.getStatusPaiment() != null){
             stmt.setString(5, echeance.getStatusPaiment().name());
+            }else{
+            stmt.setNull(5,Types.VARCHAR);
+            }
             stmt.setObject(6, echeance.getCreditId());
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -38,14 +46,22 @@ public class EcheanceRepository {
 
     // UPDATE
     public void updateEcheance(Echeance echeance) {
-        String sql = "UPDATE echeance SET date_encheance=?, mensualite=?, date_paiment=?, status_paiment=?, credit_id=? WHERE id=?";
+        String sql = "UPDATE echeance SET dateencheance=?, mensualite=?, datepaiment=?, status_paiment=?, credit_id=? WHERE id=?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setDate(1, Date.valueOf(echeance.getDateEncheance()));
             stmt.setDouble(2, echeance.getMensualite());
-            stmt.setDate(3, Date.valueOf(echeance.getDatePaiment()));
-            stmt.setString(4, echeance.getStatusPaiment().name());
+            if (echeance.getDatePaiment() != null) {
+                stmt.setDate(3, Date.valueOf(echeance.getDatePaiment()));
+            } else {
+                stmt.setNull(3, java.sql.Types.DATE);
+            }
+            if (echeance.getStatusPaiment() != null) {
+                stmt.setObject(4, echeance.getStatusPaiment(), java.sql.Types.OTHER); // Pass ENUM directly
+            } else {
+                stmt.setNull(4, java.sql.Types.OTHER);
+            }
             stmt.setObject(5, echeance.getCreditId());
-            stmt.setObject(7, echeance.getId());
+            stmt.setObject(6, echeance.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -101,10 +117,10 @@ public class EcheanceRepository {
     private Echeance mapResultSetToEcheance(ResultSet rs) throws SQLException {
         return new Echeance(
                 (UUID) rs.getObject("id"),
-                rs.getDate("date_encheance").toLocalDate(),
+                rs.getDate("dateencheance").toLocalDate(),
                 rs.getDouble("mensualite"),
-                rs.getDate("date_paiment").toLocalDate(),
-                StatusPaiment.valueOf(rs.getString("status_paiment")),
+                rs.getDate("datepaiment") != null ? rs.getDate("datepaiment").toLocalDate() : null,
+                rs.getString("status_paiment") != null ? StatusPaiment.valueOf(rs.getString("status_paiment")) : null,
                 (UUID) rs.getObject("credit_id")
         );
     }

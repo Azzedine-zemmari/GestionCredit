@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ScoreService {
 
-    public int countScoreForClient(Person person , List<Echeance> echeances){
+    public int countScoreForClient(Person person){
         int score = 0;
         // 1) STABILIT PROFESSIONNELLE (Employe ou Professionnel)
         if(person instanceof Employe){
@@ -34,7 +34,7 @@ public class ScoreService {
         if(Boolean.TRUE.equals(person.getInvistisement()) || Boolean.TRUE.equals(person.getPlacement())){
             score+=10;
         }
-        score += countScoreParHistorique(echeances);
+//        score += countScoreParHistorique(echeances);
         return score;
     }
 
@@ -108,6 +108,4 @@ public class ScoreService {
 
         return score;
     }
-
-
 }
