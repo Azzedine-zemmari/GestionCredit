@@ -24,7 +24,7 @@ public class IncidentRepository {
 
     // CREATE
     public void createIncident(Incident incident) {
-        String sql = "INSERT INTO incident(id, dateincident, scoreimpact, type_incident, echeance_id) VALUES(?,?,?,?,?)";
+        String sql = "INSERT INTO incident(id, dateincident, scoreimpact, type_incident, echeance_id) VALUES(?,?,?,Cast(? as status_paiment),?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setObject(1, incident.getId());
             stmt.setDate(2, Date.valueOf(incident.getDateIncident()));

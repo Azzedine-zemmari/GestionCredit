@@ -50,7 +50,10 @@ public class Main {
         UUID uuid = UUID.fromString("0e1ffba1-f315-4ac8-aa2a-1362578107f0");
         Echeance echeance = er.getEcheanceById(uuid);
         EcheanceService ech = new EcheanceService();
-        ech.modifierEncheanceStaus(echeance);
+        UUID id = UUID.fromString("08984741-7b36-43f0-9673-6d33e6fd755c");
+        CreditRepository cr = new CreditRepository();
+        Credit credit = cr.getCreditById(id);
+        ech.modifierEncheanceStaus(echeance,credit);
 
 
 //        EmployeRepository ep = new EmployeRepository();

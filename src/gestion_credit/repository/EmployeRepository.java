@@ -46,13 +46,14 @@ public class EmployeRepository {
             System.out.println("Erreur pour insert Employe " + e);
         }
     }
-    public void modifierEmploye(UUID id, Double salaire , String ville , SituationFamilly situationFamilly){
-        String sql = "UPDATE employe SET salaire = ? , ville = ? , situation_familly = CAST(? as situation_familly) where id = ?";
+    public void modifierEmploye(Employe employe){
+        String sql = "UPDATE employe SET salaire = ? , ville = ? , situation_familly = CAST(? as situation_familly) , score where id = ?";
         try(PreparedStatement stmt = connection.prepareStatement(sql)){
-            stmt.setDouble(1,salaire);
-            stmt.setString(2,ville);
-            stmt.setString(3,situationFamilly.name());
-            stmt.setObject(4,id);
+            stmt.setDouble(1,employe.getSalaire());
+            stmt.setString(2,employe.getVille());
+            stmt.setString(3,employe.getSituationFamilly().name());
+            stmt.setInt(4,employe.getScore());
+            stmt.setObject(5,employe.getId());
             stmt.executeUpdate();
             System.out.println("Modifier done");
         }catch (SQLException e){

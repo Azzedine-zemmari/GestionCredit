@@ -5,6 +5,7 @@ import gestion_credit.utils.connnection.Connect;
 import gestion_credit.utils.enums.StatusPaiment;
 import gestion_credit.utils.enums.TypeContrat;
 
+import java.security.spec.EncodedKeySpec;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -111,6 +112,22 @@ public class EcheanceRepository {
             System.out.println("Erreur getAllEcheances: " + e);
         }
         return echeances;
+    }
+//    Get all echances by credit id
+    public List<Echeance> getAllEcheancesByCreditId(UUID creditId){
+        List<Echeance> echeances = new ArrayList<>();
+        String sql = "SELECT * FROM echeance where credit_id = ?";
+        try(PreparedStatement stmt = connection.prepareStatement(sql)){
+            stmt.setObject(1,creditId);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                echeances.add(mapResultSetToEcheance(rs));
+            }
+            return echeances;
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return  null;
     }
 
     // HELPER METHOD

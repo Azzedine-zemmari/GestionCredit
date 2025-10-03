@@ -43,13 +43,14 @@ public class ProfessionalRepository {
             System.out.println("erreur "+ e);
         }
     }
-    public void modifierProfessional(UUID id, Double revenu , String ville , SituationFamilly situationFamilly){
-        String sql = "UPDATE professional SET revenu = ? , ville = ? , situation_familly = CAST(? as situation_familly) where id = ?";
+    public void modifierProfessional(Professionel professionel){
+        String sql = "UPDATE professional SET revenu = ? , ville = ? , situation_familly = CAST(? as situation_familly) , score = ? where id = ?";
         try(PreparedStatement stmt = connection.prepareStatement(sql)){
-            stmt.setDouble(1,revenu);
-            stmt.setString(2,ville);
-            stmt.setString(3,situationFamilly.name());
-            stmt.setObject(4,id);
+            stmt.setDouble(1,professionel.getRevenu());
+            stmt.setString(2,professionel.getVille());
+            stmt.setString(3,professionel.getSituationFamilly().name());
+            stmt.setInt(4,professionel.getScore());
+            stmt.setObject(5,professionel.getId());
             stmt.executeUpdate();
         }catch (SQLException e){
             System.out.println("erreur " + e);
