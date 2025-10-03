@@ -36,6 +36,8 @@ public class EcheanceService {
     }
 
     //    modifier status du paiment en se base sur la date du paiment et date echeance
+    // creee incident
+    // modifier score
     public void modifierEncheanceStaus(Echeance echeance, Credit credit) {
         LocalDate due = echeance.getDateEncheance();
         LocalDate payDate = echeance.getDatePaiment();

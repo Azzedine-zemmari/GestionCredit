@@ -47,7 +47,7 @@ public class EmployeRepository {
         }
     }
     public void modifierEmploye(Employe employe){
-        String sql = "UPDATE employe SET salaire = ? , ville = ? , situation_familly = CAST(? as situation_familly) , score where id = ?";
+        String sql = "UPDATE employe SET salaire = ? , ville = ? , situation_familly = CAST(? as situation_familly) , score = ? where id = ?";
         try(PreparedStatement stmt = connection.prepareStatement(sql)){
             stmt.setDouble(1,employe.getSalaire());
             stmt.setString(2,employe.getVille());
@@ -57,7 +57,7 @@ public class EmployeRepository {
             stmt.executeUpdate();
             System.out.println("Modifier done");
         }catch (SQLException e){
-            System.out.println("erreur " + e);
+            System.out.println("erreur f modifierEmploye" + e);
         }
     }
     public Employe consulterProfileEmploye(UUID id) {

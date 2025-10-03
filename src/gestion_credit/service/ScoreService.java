@@ -4,6 +4,8 @@ import gestion_credit.model.Echeance;
 import gestion_credit.model.Employe;
 import gestion_credit.model.Person;
 import gestion_credit.model.Professionel;
+import gestion_credit.repository.EmployeRepository;
+import gestion_credit.repository.ProfessionalRepository;
 import gestion_credit.utils.enums.SituationFamilly;
 import gestion_credit.utils.enums.StatusPaiment;
 import gestion_credit.utils.enums.TypeContrat;
