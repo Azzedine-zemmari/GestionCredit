@@ -1,15 +1,9 @@
 package gestion_credit.ui;
 
-import gestion_credit.model.Credit;
-import gestion_credit.model.Echeance;
-import gestion_credit.model.Employe;
-import gestion_credit.model.Professionel;
+import gestion_credit.model.*;
 import gestion_credit.repository.CreditRepository;
 import gestion_credit.repository.EcheanceRepository;
-import gestion_credit.service.CreditService;
-import gestion_credit.service.EcheanceService;
-import gestion_credit.service.EmployeService;
-import gestion_credit.service.ProfessionalService;
+import gestion_credit.service.*;
 import gestion_credit.utils.enums.Secteur;
 import gestion_credit.utils.enums.SituationFamilly;
 import gestion_credit.utils.enums.TypeContrat;
@@ -17,9 +11,7 @@ import gestion_credit.utils.enums.TypeContrat;
 import javax.swing.text.html.Option;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
-import java.util.Scanner;
-import java.util.UUID;
+import java.util.*;
 
 public class Menu {
     private Scanner scanner = new Scanner(System.in);
@@ -29,12 +21,14 @@ public class Menu {
     private EcheanceService echeanceService = new EcheanceService();
     private EcheanceRepository echeanceRepository = new EcheanceRepository();
     private CreditRepository creditRepository = new CreditRepository();
+    private Analytics analyticRepository = new Analytics();
     public void start(){
         int choix = -1;
         while(choix != 0){
             System.out.println("1. create compte");
             System.out.println("2 . demand de credit");
             System.out.println("3 . payer une echeance ");
+            System.out.println("4 . analytics ");
             System.out.println("0 . Quitter");
             choix = scanner.nextInt();
             scanner.nextLine();
@@ -56,6 +50,7 @@ public class Menu {
                     break;
                 case 2: demandCredit();break;
                 case 3 : payerEcheance();break;
+                case 4 : menuAnalitycs();break;
                 case 0:
                     System.out.println("au revoir");
                     break;
@@ -250,5 +245,77 @@ public class Menu {
             System.out.println("au revoir");
         }
     }
+
+        public void menuAnalitycs(){
+            int choix = -1;
+            while(choix != 0){
+            System.out.println("1. rechercher par client ");
+            System.out.println("2. trie les client  ");
+            System.out.println("3. Repartition du type");
+            System.out.println("4. usage buisniss ");
+            choix = scanner.nextInt();
+            scanner.nextLine();
+            switch (choix){
+                case  1:rechercherParClient();break;
+                case 2 : trieClient();break;
+                case 3 : analyticRepository.RepartitionDuType(); break;
+                case 4 : analyticRepository.usageBisniss();break;
+                case 0 :
+                    System.out.println("au revoir");
+                    break;
+                default:
+                    System.out.println("choisi un nombre dans la list");
+                   break;
+            }
+
+            }
+        }
+        public void rechercherParClient(){
+            System.out.println("Entrer id du person ");
+            String str = scanner.nextLine();
+            UUID uuid = UUID.fromString(str);
+
+            Optional<Employe> employe =  employeService.getEmployeById(uuid);
+            Optional<Professionel> professione = professionalService.getProfessionalById(uuid);
+
+            List<Person> result = new ArrayList<>();
+            if(employe.isPresent()){
+                result = analyticRepository.rechercheClient(employe.get());
+            }
+            else if(professione.isPresent()){
+                result = analyticRepository.rechercheClient(professione.get());
+            }
+
+            if(result.isEmpty()){
+                System.out.println("Aucun client trouvé.");
+            }
+            else{
+                result.forEach(System.out::println);
+            }
+        }
+        public void trieClient(){
+            System.out.println("Entrer id du person ");
+            String str = scanner.nextLine();
+            UUID uuid = UUID.fromString(str);
+
+            Optional<Employe> employe =  employeService.getEmployeById(uuid);
+            Optional<Professionel> professione = professionalService.getProfessionalById(uuid);
+
+            List<Person> result = new ArrayList<>();
+
+            if(employe.isPresent()){
+                result = analyticRepository.trie(employe.get());
+            }
+            else if(professione.isPresent()){
+                result = analyticRepository.trie(professione.get());
+            }
+
+            if(result.isEmpty()){
+                System.out.println("Aucun client trouvé.");
+            }
+            else{
+                result.forEach(System.out::println);
+            }
+        }
 
 }

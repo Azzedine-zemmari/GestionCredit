@@ -55,27 +55,22 @@ public class Analytics {
         if (p instanceof Employe) {
             List<Employe> employes = employeService.getAllEmployes();
             return employes.stream()
-                    .sorted((p1, p2) -> Integer.compare(p2.getScore(), p1.getScore()))
-                    .sorted(Comparator.comparing(Employe::getSalaire).reversed())
-                    .sorted(new Comparator<Employe>() {
-                        @Override
-                        public int compare(Employe o1, Employe o2) {
-                            return Integer.compare(o2.getAncienneté(), o1.getAncienneté());
-                        }
-                    })
+                    .sorted(Comparator.comparing(Employe::getScore).reversed()
+                            .thenComparing(Employe::getSalaire, Comparator.reverseOrder())
+                            .thenComparing(Employe::getAncienneté, Comparator.reverseOrder()))
                     .map(employe -> (Person) employe)
                     .collect(Collectors.toList());
         } else {
             List<Professionel> professionels = professionalService.getAllProfessionals();
             return professionels.stream()
-                    .sorted(Comparator.comparing(Professionel::getScore).reversed())
-                    .sorted((p1, p2) -> Double.compare(p2.getRevenu(), p1.getRevenu()))
+                    .sorted(Comparator.comparing(Professionel::getScore).reversed()
+                            .thenComparing(Professionel::getRevenu, Comparator.reverseOrder()))
                     .map(professionel -> (Person) professionel)
                     .collect(Collectors.toList());
         }
 
     }
-    public void RepartitionDuType(Employe employe){
+    public void RepartitionDuType(){
         List<Employe> employes = employeService.getAllEmployes();
         employes.stream()
                 .collect(Collectors.groupingBy(Employe::getTypeContrat))
@@ -89,7 +84,7 @@ public class Analytics {
                     System.out.println(typeContrat + " " + total);
                     System.out.println("Score revenu : " + String.format("%.2f",averageScore));
                     System.out.println("Moyen revenu : " + String.format("%.0f",avergaeMoyen) + " DH");
-                    System.out.println("taux approbation : " + String.format("%.2f",tauxApproves));
+                    System.out.println("taux approbation : " + String.format("%.2f",tauxApproves) + " %");
                 } ));
     }
     public void usageBisniss(){
