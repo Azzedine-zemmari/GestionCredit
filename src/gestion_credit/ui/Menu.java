@@ -2,14 +2,17 @@ package gestion_credit.ui;
 
 import gestion_credit.model.Employe;
 import gestion_credit.model.Professionel;
+import gestion_credit.service.CreditService;
 import gestion_credit.service.EmployeService;
 import gestion_credit.service.ProfessionalService;
 import gestion_credit.utils.enums.Secteur;
 import gestion_credit.utils.enums.SituationFamilly;
 import gestion_credit.utils.enums.TypeContrat;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -17,6 +20,7 @@ public class Menu {
     private Scanner scanner = new Scanner(System.in);
     private EmployeService employeService  = new EmployeService();
     private ProfessionalService professionalService = new ProfessionalService();
+    private CreditService creditService = new CreditService();
     public void start(){
         int choix = -1;
         while(choix != 0){
@@ -41,6 +45,7 @@ public class Menu {
                             break;
                     }
                     break;
+                case 2: demandCredit();break;
                 case 0:
                     System.out.println("au revoir");
                     break;
@@ -177,4 +182,21 @@ public class Menu {
         System.out.println("Compte Professionnel créé avec succès !");
     }
 
+    public void demandCredit(){
+        System.out.println("Entrer votre id : ");
+        String str = scanner.nextLine();
+        UUID id = UUID.fromString(str);
+
+        Optional<Employe> em = employeService.getEmployeById(id);
+        Optional<Professionel> pro = professionalService.getProfessionalById(id);
+        if(em.isPresent()){
+            Employe employe = em.get();
+            creditService.creeCredit(employe);
+        }
+        else{
+            Professionel professionel = pro.get();
+            creditService.creeCredit(professionel);
+        }
+
+    }
 }

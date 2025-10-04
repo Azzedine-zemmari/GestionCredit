@@ -1,5 +1,6 @@
 package gestion_credit.service;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import gestion_credit.model.Credit;
 import gestion_credit.model.Employe;
 import gestion_credit.model.Person;
@@ -12,6 +13,7 @@ import gestion_credit.utils.enums.PersonType;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Scanner;
 import java.util.UUID;
 
 public class CreditService {
@@ -63,9 +65,18 @@ public class CreditService {
                 personType = PersonType.PROFESSIONNEL;
             }
         }
-//          hadi tdirha method f menu bach hta iconfimer 3ad itrcree compte (hadi khss treturn ghir montantoctrorye)
-        Credit credit = new Credit(UUID.randomUUID(), LocalDate.now(), montantOctroy, 0.03, 50, "Personnel", decision, person.getId(), personType);
-        creditRepository.creeCredit(credit);
+        System.out.println("sa c'est le montant que on peut donner " + montantOctroy);
+        System.out.println("true/false : ");
+        Scanner scanner = new Scanner(System.in);
+        Boolean answer = scanner.nextBoolean();
+        if(answer){
+            Credit credit = new Credit(UUID.randomUUID(), LocalDate.now(), montantOctroy, 0.03, 50, "Personnel", decision, person.getId(), personType);
+            creditRepository.creeCredit(credit);
+            System.out.println("Credit cree avec success , pour plus de details : \n");
+            System.out.println(credit);
+        }else{
+            System.out.println("desoler en peut pas aider vous");
+        }
 
     }
 
