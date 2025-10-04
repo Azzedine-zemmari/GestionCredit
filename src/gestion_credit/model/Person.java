@@ -18,7 +18,7 @@ public abstract class Person {
     protected LocalDate created_at;
     protected Integer score;
 
-    public Person(UUID id, String nom, String prenom, LocalDate dateNaissance, String ville, Integer nombreEnfants,Boolean invistisement, Boolean placement, SituationFamilly situationFamilly, LocalDate created_at, Integer score) {
+    public Person(UUID id, String nom, String prenom ,LocalDate dateNaissance, String ville, Integer nombreEnfants,Boolean invistisement, Boolean placement, SituationFamilly situationFamilly, LocalDate created_at, Integer score) {
         this.id = id;
         this.nom = nom;
         this.prenom = prenom;
