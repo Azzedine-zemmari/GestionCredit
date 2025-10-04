@@ -6,6 +6,7 @@ import gestion_credit.repository.ProfessionalRepository;
 import gestion_credit.service.CreditService;
 import gestion_credit.service.EcheanceService;
 import gestion_credit.service.ScoreService;
+import gestion_credit.ui.Menu;
 import gestion_credit.utils.connnection.Connect;
 import gestion_credit.utils.enums.*;
 
@@ -59,16 +60,19 @@ public class Main {
 //        CreditRepository cr = new CreditRepository();
 //        Credit credit = cr.getCreditById(id);
 //        ech.modifierEncheanceStaus(echeance,credit);
-        CreditService cr = new CreditService();
-        EmployeRepository em = new EmployeRepository();
-        UUID uuid = UUID.fromString("a1243d4b-71bd-4df2-ae07-779e83b6cff9");
-        Employe employe = em.consulterProfileEmploye(uuid);
-        cr.creeCredit(employe);
+//        CreditService cr = new CreditService();
+//        EmployeRepository em = new EmployeRepository();
+//        UUID uuid = UUID.fromString("a1243d4b-71bd-4df2-ae07-779e83b6cff9");
+//        Employe employe = em.consulterProfileEmploye(uuid);
+//        cr.creeCredit(employe);
 
 
 //        UUID id = UUID.fromString("217d8008-ddae-49f1-89b8-1b509e670013");
 //        Employe e1 = ep.consulterProfileEmploye(id);
 //        ScoreService sc = new ScoreService();
 //        System.out.println(sc.countScoreForClient(e1));
+
+        Menu menu1 = new Menu();
+        menu1.start();
     }
 }
