@@ -1,8 +1,10 @@
 package gestion_credit.ui;
 
+import gestion_credit.model.Credit;
 import gestion_credit.model.Employe;
 import gestion_credit.model.Professionel;
 import gestion_credit.service.CreditService;
+import gestion_credit.service.EcheanceService;
 import gestion_credit.service.EmployeService;
 import gestion_credit.service.ProfessionalService;
 import gestion_credit.utils.enums.Secteur;
@@ -21,6 +23,7 @@ public class Menu {
     private EmployeService employeService  = new EmployeService();
     private ProfessionalService professionalService = new ProfessionalService();
     private CreditService creditService = new CreditService();
+    private EcheanceService echeanceService = new EcheanceService();
     public void start(){
         int choix = -1;
         while(choix != 0){
@@ -182,21 +185,39 @@ public class Menu {
         System.out.println("Compte Professionnel créé avec succès !");
     }
 
-    public void demandCredit(){
+    public void demandCredit() {
         System.out.println("Entrer votre id : ");
         String str = scanner.nextLine();
         UUID id = UUID.fromString(str);
 
         Optional<Employe> em = employeService.getEmployeById(id);
-        Optional<Professionel> pro = professionalService.getProfessionalById(id);
-        if(em.isPresent()){
+
+        if (em.isPresent()) {
             Employe employe = em.get();
-            creditService.creeCredit(employe);
-        }
-        else{
-            Professionel professionel = pro.get();
-            creditService.creeCredit(professionel);
+            Optional<Credit> creditOpt = creditService.creeCredit(employe);
+
+            if (creditOpt.isPresent()) {
+                    echeanceService.creeEncheance(creditOpt.get());
+                System.out.println("echeance cree avec succes tra ra raa");
+            } else {
+                System.out.println(" Aucun crédit n'a été accordé à cet employé.");
+            }
+            return;
         }
 
+        Optional<Professionel> pro = professionalService.getProfessionalById(id);
+
+        if (pro.isPresent()) {
+            Professionel professionel = pro.get();
+            Optional<Credit> creditOpt = creditService.creeCredit(professionel);
+
+            if (creditOpt.isPresent()) {
+                echeanceService.creeEncheance(creditOpt.get());
+                System.out.println("echeance cree avec succes tra ra raa");
+            }
+        } else {
+            System.out.println("Aucun client trouvé avec cet ID.");
+        }
     }
+
 }

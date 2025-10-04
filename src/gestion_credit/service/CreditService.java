@@ -13,6 +13,7 @@ import gestion_credit.utils.enums.PersonType;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -22,7 +23,7 @@ public class CreditService {
     private EmployeRepository employeRepository = new EmployeRepository();
     private ProfessionalRepository professionalRepository = new ProfessionalRepository();
 
-    public void creeCredit(Person person) {
+    public Optional<Credit> creeCredit(Person person) {
         // hna kndir set score f db
         int score = scoreService.countScoreForClient(person);
         person.setScore(score);
@@ -39,10 +40,10 @@ public class CreditService {
         PersonType personType = PersonType.EMPLOYE;
         if (decision.equals(Decision.ETUDEMANUELLE)) {
             System.out.println("notre decision et en etude manuelle");
-            return;
+            return Optional.empty();
         } else if (decision.equals(Decision.REFUS_AUTOMATIQUE)) {
             System.out.println("votre demande et refus automatique");
-            return;
+            return Optional.empty();
         }
         // hna kt7sb montantOctroy
         if (score > 70 && !ancienter) {
@@ -74,8 +75,10 @@ public class CreditService {
             creditRepository.creeCredit(credit);
             System.out.println("Credit cree avec success , pour plus de details : \n");
             System.out.println(credit);
+            return Optional.of(credit);
         }else{
             System.out.println("desoler en peut pas aider vous");
+            return Optional.empty();
         }
 
     }
