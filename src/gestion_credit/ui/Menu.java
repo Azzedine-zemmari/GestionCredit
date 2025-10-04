@@ -1,7 +1,9 @@
 package gestion_credit.ui;
 
 import gestion_credit.model.Employe;
+import gestion_credit.model.Professionel;
 import gestion_credit.service.EmployeService;
+import gestion_credit.service.ProfessionalService;
 import gestion_credit.utils.enums.Secteur;
 import gestion_credit.utils.enums.SituationFamilly;
 import gestion_credit.utils.enums.TypeContrat;
@@ -14,6 +16,7 @@ import java.util.UUID;
 public class Menu {
     private Scanner scanner = new Scanner(System.in);
     private EmployeService employeService  = new EmployeService();
+    private ProfessionalService professionalService = new ProfessionalService();
     public void start(){
         int choix = -1;
         while(choix != 0){
@@ -32,6 +35,7 @@ public class Menu {
 
                     switch (CompteChoice){
                         case 1 : creeCompteEmploye();break;
+                        case 2 : creeCompteProfessionel();break;
                         default:
                             System.out.println("Choissi un nombre d un la liste");
                             break;
@@ -112,4 +116,65 @@ public class Menu {
         employeService.createEmploye(employe);
         System.out.println("Compte Employé créé avec succès!");
     }
+    public void creeCompteProfessionel() {
+        System.out.println("=== Création d'un compte Professionnel ===");
+
+        System.out.print("Nom: ");
+        String nom = scanner.nextLine();
+
+        System.out.print("Prénom: ");
+        String prenom = scanner.nextLine();
+
+        System.out.print("Date de naissance (yyyy-MM-dd): ");
+        String dateStr = scanner.nextLine();
+        LocalDate dateNaissance = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+        System.out.print("Ville: ");
+        String ville = scanner.nextLine();
+
+        System.out.print("Nombre d'enfants: ");
+        Integer nombreEnfants = Integer.parseInt(scanner.nextLine());
+
+        System.out.print("Investissement (true/false): ");
+        Boolean invistisement = Boolean.parseBoolean(scanner.nextLine());
+
+        System.out.print("Placement (true/false): ");
+        Boolean placement = Boolean.parseBoolean(scanner.nextLine());
+
+        System.out.print("Situation familiale (CELIBATAIRE/MARIE): ");
+        SituationFamilly situationFamilly = SituationFamilly.valueOf(scanner.nextLine().toUpperCase());
+
+        System.out.print("Revenu: ");
+        Double revenu = Double.parseDouble(scanner.nextLine());
+
+        System.out.print("Immatriculation fiscale: ");
+        String immatriculationFiscale = scanner.nextLine();
+
+        System.out.print("Secteur d'activité: ");
+        String secteurActivite = scanner.nextLine();
+
+        System.out.print("Activité: ");
+        String activite = scanner.nextLine();
+
+        Professionel professionel = new Professionel(
+                UUID.randomUUID(),
+                nom,
+                prenom,
+                dateNaissance,
+                ville,
+                nombreEnfants,
+                invistisement,
+                placement,
+                situationFamilly,
+                LocalDate.now(), // created_at
+                0,               // score initial
+                revenu,
+                immatriculationFiscale,
+                secteurActivite,
+                activite
+        );
+        professionalService.createProfessional(professionel);
+        System.out.println("Compte Professionnel créé avec succès !");
+    }
+
 }
