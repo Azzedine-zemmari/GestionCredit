@@ -1,8 +1,11 @@
 package gestion_credit.ui;
 
 import gestion_credit.model.Credit;
+import gestion_credit.model.Echeance;
 import gestion_credit.model.Employe;
 import gestion_credit.model.Professionel;
+import gestion_credit.repository.CreditRepository;
+import gestion_credit.repository.EcheanceRepository;
 import gestion_credit.service.CreditService;
 import gestion_credit.service.EcheanceService;
 import gestion_credit.service.EmployeService;
@@ -24,11 +27,14 @@ public class Menu {
     private ProfessionalService professionalService = new ProfessionalService();
     private CreditService creditService = new CreditService();
     private EcheanceService echeanceService = new EcheanceService();
+    private EcheanceRepository echeanceRepository = new EcheanceRepository();
+    private CreditRepository creditRepository = new CreditRepository();
     public void start(){
         int choix = -1;
         while(choix != 0){
             System.out.println("1. create compte");
             System.out.println("2 . demand de credit");
+            System.out.println("3 . payer une echeance ");
             System.out.println("0 . Quitter");
             choix = scanner.nextInt();
             scanner.nextLine();
@@ -49,6 +55,7 @@ public class Menu {
                     }
                     break;
                 case 2: demandCredit();break;
+                case 3 : payerEcheance();break;
                 case 0:
                     System.out.println("au revoir");
                     break;
@@ -217,6 +224,30 @@ public class Menu {
             }
         } else {
             System.out.println("Aucun client trouvé avec cet ID.");
+        }
+    }
+    public void payerEcheance(){
+        System.out.println("Entre echeance id : ");
+        String str = scanner.nextLine();
+        UUID id = UUID.fromString(str);
+
+        Echeance echeance = echeanceRepository.getEcheanceById(id);
+        System.out.println("PAYER(TRUE/FALSE) : ");
+        boolean answer = scanner.nextBoolean();
+
+        if(answer){
+            echeance.setDatePaiment(LocalDate.parse("2025-11-04", DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            echeanceRepository.updateEcheance(echeance);
+
+            Credit credit = creditRepository.getCreditById(echeance.getCreditId());
+
+            echeanceService.modifierEncheanceStaus(echeance,credit);
+            System.out.println("Echeance et payer pas success");
+        }else{
+            Credit credit = creditRepository.getCreditById(echeance.getCreditId());
+
+            echeanceService.modifierEncheanceStaus(echeance,credit);
+            System.out.println("au revoir");
         }
     }
 

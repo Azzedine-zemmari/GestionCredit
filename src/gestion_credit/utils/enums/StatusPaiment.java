@@ -5,5 +5,6 @@ public enum StatusPaiment {
     EN_RETARD,
     PAYE_EN_RETARD,
     IMPAYE_NON_REGLE,
-    IMPAYE_REGLE
+    IMPAYE_REGLE,
+    EN_ATTENTE
 }

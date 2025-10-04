@@ -46,27 +46,33 @@ public class EcheanceService {
         StatusPaiment statusPaiment = null;
 
         // Déterminer le nouveau statut
+
         if (payDate == null) {
             if (now.isAfter(due.plusDays(30))) {
-                statusPaiment = StatusPaiment.IMPAYE_NON_REGLE;
+                statusPaiment = StatusPaiment.IMPAYE_NON_REGLE; // 31+ jours sans paiement
             } else if (now.isAfter(due.plusDays(5))) {
-                statusPaiment = StatusPaiment.EN_RETARD;
+                statusPaiment = StatusPaiment.EN_RETARD; // 5-30 jours sans paiement
+            } else {
+                statusPaiment = StatusPaiment.EN_ATTENTE; // Encore dans le délai
             }
-        } else {
-            if (payDate.isAfter(due.plusDays(30))) {
+        } else { // payDate != null
+            if (!payDate.isBefore(due.plusDays(30))) { // means >= 30 days late
                 statusPaiment = StatusPaiment.IMPAYE_REGLE;
-            } else if (payDate.isAfter(due.plusDays(5))) {
+            } else if (!payDate.isBefore(due.plusDays(5))) { // means >= 6 days late
                 statusPaiment = StatusPaiment.PAYE_EN_RETARD;
             } else {
                 statusPaiment = StatusPaiment.PAYE_A_TEMPS;
             }
         }
 
+
+        echeance.setStatusPaiment(statusPaiment);
+
         // Mise à jour du statut
         echeanceRepository.updateEcheance(echeance);
 
         // Si incident de paiement → appliquer impact
-        if (statusPaiment != StatusPaiment.PAYE_A_TEMPS) {
+        if (statusPaiment != StatusPaiment.PAYE_A_TEMPS && statusPaiment != StatusPaiment.EN_ATTENTE) {
 
             int impact = applyImpactToPersonScore(credit); // score calculé avec historique
             Incident incident = new Incident(UUID.randomUUID(), now, impact, statusPaiment, echeance.getId());
